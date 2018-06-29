@@ -393,6 +393,7 @@ class PseudoLabel:
                         None, # because the model is instance of sequence
                         verbose=1)
 
+                    # One-hot encoded
                     self.no_label_generator.classes = np.argmax(no_label_output, axis=1)
 
                     # concat 
