@@ -388,7 +388,7 @@ class PseudoLabel:
                     print 'Generating pseudo-labels...'
                     no_label_output = self.model.predict_generator(
                         self.no_label_generator, 
-                        1, 
+                        None, # because the model is instance of sequence
                         verbose=1)
 
                     self.no_label_generator.classes = np.argmax(no_label_output, axis=1)
