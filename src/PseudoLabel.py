@@ -396,8 +396,7 @@ class PseudoLabel:
                     # One-hot encoded
                     self.no_label_generator.classes = np.argmax(no_label_output, axis=1)
 
-                    # concat 
-                    self.no_label_generator.batch_index = self.train_generator.batch_index-1
+                    # Concat Pseudo labels with true labels 
                     x_pseudo, y_pseudo = next(self.no_label_generator)
                     x, y = np.concatenate((x, x_pseudo), axis=0), np.concatenate((y, y_pseudo), axis=0)                    
 
