@@ -158,6 +158,8 @@ class PseudoLabel:
             raise ValueError("The specified architecture \'" +
                              architecture + "\' is not supported!")
         else:
+            if use_transfer_learning and not 0 <= fine_tuning_rate <= 100:
+                raise ValueError("The fine tuning rate must be beetween 0 and 100!")
             if use_transfer_learning and fine_tuning_rate == None:
                 raise ValueError(
                     "You need to specify a fine tuning rate if you're using transfer learning!")
