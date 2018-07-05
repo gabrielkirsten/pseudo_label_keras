@@ -400,16 +400,6 @@ class PseudoLabel:
                     x_pseudo, y_pseudo = next(self.no_label_generator)
                     x, y = np.concatenate((x, x_pseudo), axis=0), np.concatenate((y, y_pseudo), axis=0)                    
 
-                    if len(generator_output) == 2:
-                        x, y = generator_output
-                        sample_weight = None
-                    elif len(generator_output) == 3:
-                        x, y, sample_weight = generator_output
-                    else:
-                        raise ValueError('Output of generator should be '
-                                         'a tuple `(x, y, sample_weight)` '
-                                         'or `(x, y)`. Found: ' +
-                                         str(generator_output))
 
                     # build batch logs
                     batch_logs = {}
