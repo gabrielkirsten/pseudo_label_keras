@@ -277,6 +277,7 @@ class PseudoLabel:
     ################################################################################
     def fit_with_pseudo_label(self,
                               steps_per_epoch,
+                              validation_steps=None,
                               use_checkpoints=False,
                               class_labels=None,
                               verbose=1,
@@ -284,6 +285,10 @@ class PseudoLabel:
                               shuffle=False,
                               workers=1,
                               max_queue_size=10):
+
+        # Default value if validation steps is none
+        if(validation_steps == None):
+            validation_steps = self.validation_generator.samples // self.batch_size
 
         wait_time = 0.01  # in seconds
 
@@ -306,8 +311,24 @@ class PseudoLabel:
         # Init train counters
         epoch = 0
 
+        validation_data = self.validation_generator
+        do_validation = bool(validation_data)
+        self.model._make_train_function()
+        if do_validation:
+            self.model._make_test_function()
+
+        val_gen = (hasattr(validation_data, 'next') or
+        hasattr(validation_data, '__next__') or
+        isinstance(validation_data, Sequence))
+        if (val_gen and not isinstance(validation_data, Sequence) and
+                not validation_steps):
+            raise ValueError('`validation_steps=None` is only valid for a'
+                                ' generator based on the `keras.utils.Sequence`'
+                                ' class. Please specify `validation_steps` or use'
+                                ' the `keras.utils.Sequence` class.')
+
         # Prepare display labels.
-        out_labels = self.model._get_deduped_metrics_names()
+        out_labels = self.model.metrics_names
         callback_metrics = out_labels + ['val_' + n for n in out_labels]
 
         # Prepare train callbacks
@@ -337,18 +358,42 @@ class PseudoLabel:
 
         if is_sequence:
             steps_per_epoch = len(self.train_generator)
-        enqueuer = None
 
+        enqueuer = None
+        val_enqueuer = None
+        
         callbacks.set_params({
             'epochs': self.epochs,
             'steps': steps_per_epoch,
             'verbose': verbose,
-            'do_validation': True,
+            'do_validation': do_validation,
             'metrics': callback_metrics,
         })
         callbacks.on_train_begin()
 
         try:
+            if do_validation and not val_gen:
+                # Prepare data for validation
+                if len(validation_data) == 2:
+                    val_x, val_y = validation_data
+                    val_sample_weight = None
+                elif len(validation_data) == 3:
+                    val_x, val_y, val_sample_weight = validation_data
+                else:
+                    raise ValueError('`validation_data` should be a tuple '
+                                    '`(val_x, val_y, val_sample_weight)` '
+                                    'or `(val_x, val_y)`. Found: ' +
+                                    str(validation_data))
+                val_x, val_y, val_sample_weights = self.model._standardize_user_data(
+                    val_x, val_y, val_sample_weight)
+                val_data = val_x + val_y + val_sample_weights
+                if self.model.uses_learning_phase and not isinstance(K.learning_phase(),
+                                                                int):
+                    val_data += [0.]
+                for cbk in callbacks:
+                    cbk.validation_data = val_data
+
+
             if is_sequence:
                 enqueuer = OrderedEnqueuer(self.train_generator,
                                            use_multiprocessing=use_multiprocessing,
@@ -361,6 +406,9 @@ class PseudoLabel:
             output_generator = enqueuer.get()
 
             # Train the model
+
+            # Construct epoch logs.
+            epoch_logs = {}
             # Epochs
             while epoch < self.epochs:
                 callbacks.on_epoch_begin(epoch)
@@ -431,11 +479,38 @@ class PseudoLabel:
                     steps_done += 1
 
                 # Epoch finished.
+                callbacks.on_epoch_end(epoch, epoch_logs)
                 epoch += 1
 
+                if steps_done >= steps_per_epoch and do_validation:
+                    if val_gen:
+                        val_outs = self.model.evaluate_generator(
+                            validation_data,
+                            validation_steps,
+                            workers=workers,
+                            use_multiprocessing=use_multiprocessing,
+                            max_queue_size=max_queue_size)
+                    else:
+                        # No need for try/except because
+                        # data has already been validated.
+                        val_outs = self.model.evaluate(
+                            val_x, val_y,
+                            batch_size=batch_size,
+                            sample_weight=val_sample_weights,
+                            verbose=0)
+                    if not isinstance(val_outs, list):
+                        val_outs = [val_outs]
+                    # Same labels assumed.
+                    for l, o in zip(out_labels, val_outs):
+                        epoch_logs['val_' + l] = o
+
         finally:
-            if enqueuer is not None:
-                enqueuer.stop()
+            try:
+                if enqueuer is not None:
+                    enqueuer.stop()
+            finally:
+                if val_enqueuer is not None:
+                    val_enqueuer.stop()
 
         callbacks.on_train_end()
         return self.model.history
