@@ -130,6 +130,7 @@ def main():
                                architecture="VGG16")
     pseudo_label.fit_with_pseudo_label(use_checkpoints=False,
                                        steps_per_epoch=pseudo_label.validation_generator.samples // pseudo_label.batch_size)
+                                       validation_steps=pseudo_label.validation_generator.samples // pseudo_label.batch_size)
 
 
 if __name__ == '__main__':
