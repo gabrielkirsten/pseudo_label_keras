@@ -73,8 +73,8 @@ class PseudoLabel:
                                     'fine_tuning': None},
                  optimizer='SGD',
                  metrics_list=['acc'],
-                 loss_function='categorical_crossentropy',
-                 class_labels=None):
+                 class_labels=None, 
+                 alpha=0.5,
                  print_pseudo_generate=False):
         """
             Pseudo-label class construtor
@@ -98,12 +98,13 @@ class PseudoLabel:
         self.fine_tuning_rate = transfer_learning.get('fine_tuning')
         self.optimizer = optimizer
         self.metrics_list = metrics_list
-        self.loss_function = loss_function
         self.model = None
         self.train_generator = None
         self.validation_generator = None
         self.h5_filename = None
         self.class_labels = class_labels
+        self.alpha = alpha
+        self.print_pseudo_generate = print_pseudo_generate
 
         # Make your model and dataset
         self.make_data_generators()
@@ -111,8 +112,7 @@ class PseudoLabel:
                         use_transfer_learning=self.use_transfer_learning,
                         fine_tuning_rate=self.fine_tuning_rate,
                         optimizer=self.optimizer,
-                        metrics_list=self.metrics_list,
-                        loss_function=self.loss_function)
+                        metrics_list=self.metrics_list)
 
         self.generate_h5_filename() if save_heights else None
 
@@ -121,8 +121,7 @@ class PseudoLabel:
                    use_transfer_learning=False,
                    fine_tuning_rate=None,
                    optimizer='SGD',
-                   metrics_list=['accuracy'],
-                   loss_function='categorical_crossentropy'):
+                   metrics_list=['accuracy']):
         """
             Create your CNN keras model
 
@@ -134,9 +133,6 @@ class PseudoLabel:
             if metric not in LIST_OF_ACCEPTABLES_METRICS:
                 raise ValueError("The specified metric \'" +
                                  metric + "\' is not supported")
-        if loss_function not in LIST_OF_ACCEPTABLES_LOSS_FUNCTION:
-            raise ValueError("The specified loss function \'" +
-                             loss_function + "\' is not supported!")
         if optimizer not in LIST_OF_ACCEPTABLES_OPTIMIZERS.keys():
             raise ValueError("The specified optimizer \'" +
                              optimizer + "\' is not supported!")
@@ -186,11 +182,28 @@ class PseudoLabel:
         self.model = Model(inputs=self.model.input, outputs=predictions)
 
         # Compile model
-        self.model.compile(loss=loss_function,
+        self.model.compile(loss=self.pseudo_label_loss_function,
                            optimizer=LIST_OF_ACCEPTABLES_OPTIMIZERS.get(optimizer)(
                                lr=self.learning_rate
                            ),
                            metrics=metrics_list)
+
+
+    def pseudo_label_loss_function(self, y_true, y_pred):
+        loss_true_label = self.cross_entropy(y_true[:self.batch_size], y_pred[:self.batch_size])
+        loss_pseudo_label = (self.cross_entropy(y_true[self.batch_size:], y_pred[self.batch_size:]))
+        return (loss_true_label/self.batch_size) + (self.alpha * (loss_pseudo_label/self.pseudo_label_batch_size)) 
+
+    def cross_entropy(self, targets, predictions, epsilon=1e-12):
+        predictions = K.clip(predictions, epsilon, 1. - epsilon)
+        N = predictions.shape[0]
+        log1 = K.log(predictions+1e-9)
+        sum1 = K.sum(targets*log1)
+        if(predictions.shape[0].value is not None):
+            return -K.sum(sum1)/N
+        else:
+            return -K.sum(sum1)
+        
 
     def make_data_generators(self, use_data_augmentation=False):
         """
