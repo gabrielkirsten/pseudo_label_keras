@@ -210,14 +210,7 @@ class PseudoLabel:
         """
             Function that initiate the train, validation and test generators with data augumentation
         """
-        train_datagen = ImageDataGenerator(
-            rescale=1. / 255,
-            horizontal_flip=True,
-            fill_mode="nearest",
-            zoom_range=0.3,
-            width_shift_range=0.3,
-            height_shift_range=0.3,
-            rotation_range=30)
+        train_datagen = ImageDataGenerator()
 
         self.train_generator = train_datagen.flow_from_directory(
             self.train_data_directory,
@@ -228,14 +221,7 @@ class PseudoLabel:
             shuffle=True,
             class_mode="categorical")
 
-        test_datagen = ImageDataGenerator(
-            rescale=1. / 255,
-            horizontal_flip=True,
-            fill_mode="nearest",
-            zoom_range=0.3,
-            width_shift_range=0.3,
-            height_shift_range=0.3,
-            rotation_range=30)
+        test_datagen = ImageDataGenerator()
 
         self.validation_generator = test_datagen.flow_from_directory(
             self.validation_data_directory,
