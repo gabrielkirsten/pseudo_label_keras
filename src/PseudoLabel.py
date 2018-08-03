@@ -91,6 +91,7 @@ class PseudoLabel:
                  metrics_list=['acc'],
                  loss_function='categorical_crossentropy',
                  class_labels=None):
+                 print_pseudo_generate=False):
         """
             Pseudo-label class construtor
         """
@@ -421,12 +422,16 @@ class PseudoLabel:
                     #==========================
                     # Mini-batch
                     #==========================
-                    print ''
-                    print 'Generating pseudo-labels...'
+                    if (self.print_pseudo_generate):
+                        print ''
+                        print 'Generating pseudo-labels...'
+                        verbose = 1
+                    else:
+                        verbose = 0
                     no_label_output = self.model.predict_generator(
                         self.no_label_generator, 
                         None, # because the model is instance of sequence
-                        verbose=1)
+                        verbose=verbose)
 
                     # One-hot encoded
                     self.no_label_generator.classes = np.argmax(no_label_output, axis=1)
