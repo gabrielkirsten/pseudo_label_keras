@@ -6,6 +6,7 @@ import numpy as np
 
 from keras import applications
 from keras import callbacks as cbks
+from keras import backend as K
 from keras.applications import Xception, VGG16, VGG19, ResNet50, InceptionV3, MobileNet
 from keras.layers import Dropout, Flatten, Dense
 from keras.optimizers import SGD, RMSprop, Adagrad, Adadelta, Adam, Adamax, Nadam, TFOptimizer
