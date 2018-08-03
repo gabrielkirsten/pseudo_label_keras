@@ -464,9 +464,6 @@ class PseudoLabel:
                     batch_index += 1
                     steps_done += 1
 
-                # Epoch finished.
-                callbacks.on_epoch_end(epoch, epoch_logs)
-                epoch += 1
 
                 if steps_done >= steps_per_epoch and do_validation:
                     if val_gen:
@@ -490,6 +487,10 @@ class PseudoLabel:
                     for l, o in zip(out_labels, val_outs):
                         epoch_logs['val_' + l] = o
 
+                # Epoch finished.
+                callbacks.on_epoch_end(epoch, epoch_logs)
+                epoch += 1
+                
         finally:
             try:
                 if enqueuer is not None:
