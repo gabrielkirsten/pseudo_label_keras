@@ -117,7 +117,6 @@ def main():
     experiment_utils = ExperimentUtils()
     experiment_utils.create_experiment_dataset(TRAIN_DATA_DIR)
 
-    print experiment_utils.no_label_dataset_folder
 
     pseudo_label = PseudoLabel(image_width=IMG_WIDTH,
                                image_height=IMG_HEIGHT,
