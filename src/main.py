@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import confusion_matrix
 from PseudoLabel import PseudoLabel
+from ExperimentUtils import ExperimentUtils
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress warnings
 START_TIME = time.time()
@@ -113,13 +114,18 @@ def make_confusion_matrix_and_plot(validation_generator, file_name, model_final)
 
 def main():
     # args = get_args()  # read arguments
+    experiment_utils = ExperimentUtils()
+    experiment_utils.create_experiment_dataset(TRAIN_DATA_DIR)
+
+    print experiment_utils.no_label_dataset_folder
+
     pseudo_label = PseudoLabel(image_width=IMG_WIDTH,
                                image_height=IMG_HEIGHT,
                                image_channels=IMG_CHANNELS,
                                class_labels=CLASS_NAMES,
-                               train_data_directory=TRAIN_DATA_DIR,
-                               validation_data_directory=VALIDATION_DATA_DIR,
-                               no_label_data_directory=NO_LABEL_DATA_DIR,
+                               train_data_directory=experiment_utils.train_dataset_folder,
+                               validation_data_directory=experiment_utils.validation_dataset_folder,
+                               no_label_data_directory=experiment_utils.no_label_dataset_folder,
                                epochs=EPOCHS,
                                batch_size=BATCH_SIZE,
                                pseudo_label_batch_size=PSEUDO_LABEL_BATCH_SIZE,
