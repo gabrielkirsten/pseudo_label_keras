@@ -49,17 +49,23 @@ def get_args():
     arg_parse = argparse.ArgumentParser()
 
     arg_parse.add_argument("-a", "--architecture",
-                           required=True,
+                           required=False,
                            help="Select architecture(Xception, VGG16, VGG19, ResNet50" +
                            ", InceptionV3, MobileNet)",
-                           default=None,
+                           default="VGG16",
                            type=str)
 
-    arg_parse.add_argument("-f", "--fineTunningRate",
-                           required=True,
-                           help="Fine tunning rate",
+    arg_parse.add_argument("-f", "--fineTuningRate",
+                           required=False,
+                           help="Fine tuning rate",
                            default=None,
                            type=int)
+
+    arg_parse.add_argument("-d", "--datasetPath",
+                           required=True,
+                           help="Dataset location",
+                           default=None,
+                           type=str)
 
     return vars(arg_parse.parse_args())
 
@@ -113,10 +119,9 @@ def make_confusion_matrix_and_plot(validation_generator, file_name, model_final)
 
 
 def main():
-    # args = get_args()  # read arguments
+    args = get_args()  # read arguments
     experiment_utils = ExperimentUtils()
-    experiment_utils.create_experiment_dataset(TRAIN_DATA_DIR)
-
+    experiment_utils.create_experiment_dataset(args["datasetPath"])
 
     pseudo_label = PseudoLabel(image_width=IMG_WIDTH,
                                image_height=IMG_HEIGHT,
@@ -130,9 +135,9 @@ def main():
                                pseudo_label_batch_size=PSEUDO_LABEL_BATCH_SIZE,
                                transfer_learning={
                                    'use_transfer_learning': True,
-                                   'fine_tuning': 80
+                                   'fine_tuning': (80 if args["fineTuningRate"] == None else args["fineTuningRate"])
                                },
-                               architecture="VGG16")
+                               architecture=args["architecture"])
     pseudo_label.fit_with_pseudo_label(use_checkpoints=False,
                                        steps_per_epoch=pseudo_label.train_generator.samples // pseudo_label.batch_size,
                                        validation_steps=pseudo_label.validation_generator.samples // pseudo_label.batch_size)
