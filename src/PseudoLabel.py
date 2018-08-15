@@ -175,8 +175,12 @@ class PseudoLabel:
         new_custom_layers = Dense(1024, activation="relu")(new_custom_layers)
         new_custom_layers = Dropout(0.5)(new_custom_layers)
         new_custom_layers = Dense(1024, activation="relu")(new_custom_layers)
-        predictions = Dense(self.train_generator.num_classes,
-                            activation="softmax")(new_custom_layers)
+        try:
+            predictions = Dense(self.train_generator.num_classes,
+                                activation="softmax")(new_custom_layers)
+        except AttributeError:
+            predictions = Dense(self.train_generator.num_class,
+                                activation="softmax")(new_custom_layers)
 
         # Create the final model
         self.model = Model(inputs=self.model.input, outputs=predictions)
@@ -239,8 +243,10 @@ class PseudoLabel:
             batch_size=self.pseudo_label_batch_size,
             shuffle=False,
             class_mode="categorical")
-
-        self.no_label_generator.num_classes = self.validation_generator.num_classes
+        try:
+            self.no_label_generator.num_classes = self.validation_generator.num_classes
+        except AttributeError:
+            self.no_label_generator.num_class = self.validation_generator.num_class
 
     def generate_h5_filename(self):
         """
