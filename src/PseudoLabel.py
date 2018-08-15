@@ -433,7 +433,7 @@ class PseudoLabel:
                         verbose = 0
                     no_label_output = self.model.predict_generator(
                         self.no_label_generator, 
-                        None, # because the model is instance of sequence
+                        self.no_label_generator.samples, 
                         verbose=verbose)
 
                     # One-hot encoded
