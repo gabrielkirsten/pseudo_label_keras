@@ -129,7 +129,9 @@ def main():
     experiment_utils = ExperimentUtils()
     experiment_utils.create_experiment_dataset(args["datasetPath"])
 
+    architecture = (80 if args["fineTuningRate"] == None else args["fineTuningRate"])
     no_label_percent = args['noLabelPercent']
+
     pseudo_label = PseudoLabel(image_width=IMG_WIDTH,
                                image_height=IMG_HEIGHT,
                                image_channels=IMG_CHANNELS,
@@ -142,9 +144,10 @@ def main():
                                pseudo_label_batch_size=PSEUDO_LABEL_BATCH_SIZE,
                                transfer_learning={
                                    'use_transfer_learning': True,
-                                   'fine_tuning': (80 if args["fineTuningRate"] == None else args["fineTuningRate"])
+                                   architecture
                                },
                                architecture=args["architecture"])
+
     pseudo_label.fit_with_pseudo_label(use_checkpoints=False,
                                        steps_per_epoch=pseudo_label.train_generator.samples // pseudo_label.batch_size,
                                        validation_steps=pseudo_label.validation_generator.samples // pseudo_label.batch_size)
