@@ -67,6 +67,12 @@ def get_args():
                            default=None,
                            type=str)
 
+    arg_parse.add_argument("-n", "--noLabelPercent",
+                           required=True,
+                           help="Percent of no label dataset",
+                           default=None,
+                           type=int)
+
     return vars(arg_parse.parse_args())
 
 
@@ -123,6 +129,7 @@ def main():
     experiment_utils = ExperimentUtils()
     experiment_utils.create_experiment_dataset(args["datasetPath"])
 
+    no_label_percent = args['noLabelPercent']
     pseudo_label = PseudoLabel(image_width=IMG_WIDTH,
                                image_height=IMG_HEIGHT,
                                image_channels=IMG_CHANNELS,
