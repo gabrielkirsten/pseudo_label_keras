@@ -269,7 +269,7 @@ class PseudoLabel:
     def fit_with_pseudo_label(self,
                               steps_per_epoch,
                               validation_steps=None,
-                              use_checkpoints=False,
+                              use_checkpoints=True,
                               class_labels=None,
                               verbose=1,
                               use_multiprocessing=False,
