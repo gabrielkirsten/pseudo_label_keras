@@ -75,7 +75,7 @@ class PseudoLabel:
                  metrics_list=['acc'],
                  class_labels=None, 
                  alpha=0.5,
-                 print_pseudo_generate=True):
+                 print_pseudo_generate=False):
         """
             Pseudo-label class construtor
         """
