@@ -104,6 +104,14 @@ def plot_confusion_matrix(confusion_matrix_to_print, classes,
     plt.xlabel('Predicted label')
     plt.tight_layout()
 
+def make_confusion_matrix(validation_generator, file_name, model_final):
+    """print confusion matrix"""
+
+    validation_features = model_final.predict_generator(validation_generator,
+                                                        validation_generator.samples,
+                                                        verbose=0)
+
+    print confusion_matrix(np.argmax(validation_features, axis=1), validation_generator.classes)
 
 def make_confusion_matrix_and_plot(validation_generator, file_name, model_final):
     """Predict and plot confusion matrix"""
@@ -160,6 +168,6 @@ def main():
 
     print "Total time to train: %s" % (time.time() - START_TIME)
 
-    make_confusion_matrix_and_plot(pseudo_label.validation_generator, str(fine_tuning_percent)+'_'+str(no_label_percent), pseudo_label.model)
+    make_confusion_matrix(pseudo_label.validation_generator, str(fine_tuning_percent)+'_'+str(no_label_percent), pseudo_label.model)
 if __name__ == '__main__':
     main()
