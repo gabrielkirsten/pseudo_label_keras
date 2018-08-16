@@ -153,5 +153,6 @@ def main():
                                        validation_steps=pseudo_label.validation_generator.samples // pseudo_label.batch_size)
 
 
+    make_confusion_matrix_and_plot(pseudo_label.validation_generator, architecture+'_'+no_label_percent, pseudo_label.model)
 if __name__ == '__main__':
     main()
