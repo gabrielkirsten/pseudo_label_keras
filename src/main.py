@@ -11,6 +11,7 @@
 """
 
 import time
+import datetime
 import os
 import argparse
 import itertools
@@ -125,6 +126,11 @@ def make_confusion_matrix_and_plot(validation_generator, file_name, model_final)
 
 
 def main():
+    print "--------------------"
+    print "Experiment begin at:"
+    print datetime.datetime.now()
+    print "--------------------"
+
     args = get_args()  # read arguments
     experiment_utils = ExperimentUtils()
     experiment_utils.create_experiment_dataset(args["datasetPath"])
@@ -152,6 +158,7 @@ def main():
                                        steps_per_epoch=pseudo_label.train_generator.samples // pseudo_label.batch_size,
                                        validation_steps=pseudo_label.validation_generator.samples // pseudo_label.batch_size)
 
+    print "Total time to train: %s" % (time.time() - START_TIME)
 
     make_confusion_matrix_and_plot(pseudo_label.validation_generator, str(fine_tuning_percent)+'_'+str(no_label_percent), pseudo_label.model)
 if __name__ == '__main__':
