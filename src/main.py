@@ -129,7 +129,7 @@ def main():
     experiment_utils = ExperimentUtils()
     experiment_utils.create_experiment_dataset(args["datasetPath"])
 
-    architecture = (80 if args["fineTuningRate"] == None else args["fineTuningRate"])
+    fine_tuning_percent = (80 if args["fineTuningRate"] == None else args["fineTuningRate"])
     no_label_percent = args['noLabelPercent']
 
     pseudo_label = PseudoLabel(image_width=IMG_WIDTH,
@@ -144,7 +144,7 @@ def main():
                                pseudo_label_batch_size=PSEUDO_LABEL_BATCH_SIZE,
                                transfer_learning={
                                    'use_transfer_learning': True,
-                                   architecture
+                                   'fine_tuning': fine_tuning_percent
                                },
                                architecture=args["architecture"])
 
@@ -153,6 +153,6 @@ def main():
                                        validation_steps=pseudo_label.validation_generator.samples // pseudo_label.batch_size)
 
 
-    make_confusion_matrix_and_plot(pseudo_label.validation_generator, architecture+'_'+no_label_percent, pseudo_label.model)
+    make_confusion_matrix_and_plot(pseudo_label.validation_generator, str(fine_tuning_percent)+'_'+str(no_label_percent), pseudo_label.model)
 if __name__ == '__main__':
     main()
