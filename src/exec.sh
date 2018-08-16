@@ -1,13 +1,6 @@
-#for i in Xception VGG16 VGG19 ResNet50 InceptionV3; do
-#	for j in -1 0 25 50 75 100; do
-#		python script_1.py --architecture $i --fineTunningRate $j > ../results/"$i""_""$j"_doenca.txt
-#		mv ../models_checkpoints/* /media/hd/gabriel/experimento10oct/
-#	done
-#done
-
-for i in InceptionV3; do
-	for j in -1 0 25 50 75 100; do
-		python script_2.py --architecture $i --fineTunningRate $j > ../results/"$i""_""$j"_daninha.txt
-		mv ../models_checkpoints/* /media/hd/gabriel/experimento10oct/
+for i in Xception VGG16 VGG19 ResNet50 InceptionV3; do
+	for j in -1 20 20 30 40 50 60 70 80; do
+		nohup python main.py -d /home/aluno/gabriel/_dataset/doencas/doencas3000/ -n $j -a $i 
+		# mv ../models_checkpoints/* /media/hd/gabriel/experimento10oct/
 	done
 done
