@@ -152,6 +152,7 @@ def main():
                                class_labels=CLASS_NAMES,
                                train_data_directory=experiment_utils.train_dataset_folder,
                                validation_data_directory=experiment_utils.validation_dataset_folder,
+                               test_data_directory=experiment_utils.test_dataset_folder,
                                no_label_data_directory=experiment_utils.no_label_dataset_folder,
                                epochs=EPOCHS,
                                batch_size=BATCH_SIZE,
