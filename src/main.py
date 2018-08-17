@@ -36,7 +36,7 @@ TEST_DATA_DIR = "../data/test"
 NO_LABEL_DATA_DIR = "../data/no_label"
 BATCH_SIZE = 32
 PSEUDO_LABEL_BATCH_SIZE = 64
-EPOCHS = 1
+EPOCHS = 15
 CLASS_NAMES = ['ferrugemAsiatica',
                'folhaSaudavel',
                'fundo',
