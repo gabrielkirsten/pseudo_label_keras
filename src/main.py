@@ -170,5 +170,10 @@ def main():
     print "Total time to train: %s" % (time.time() - START_TIME)
 
     make_confusion_matrix(pseudo_label.test_generator, str(fine_tuning_percent)+'_'+str(no_label_percent), pseudo_label.model)
+
+    print "--------------------"
+    print "Experiment end at:"
+    print datetime.datetime.now()
+    print "--------------------"
 if __name__ == '__main__':
     main()
