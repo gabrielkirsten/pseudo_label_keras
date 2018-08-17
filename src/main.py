@@ -141,10 +141,12 @@ def main():
 
     args = get_args()  # read arguments
     experiment_utils = ExperimentUtils()
-    experiment_utils.create_experiment_dataset(args["datasetPath"])
+    no_label_percent = args['noLabelPercent']
+
+    experiment_utils.create_experiment_dataset(args["datasetPath"], 
+                                               percent_of_no_label_dataset = no_label_percent)
 
     fine_tuning_percent = (80 if args["fineTuningRate"] == None else args["fineTuningRate"])
-    no_label_percent = args['noLabelPercent']
 
     pseudo_label = PseudoLabel(image_width=IMG_WIDTH,
                                image_height=IMG_HEIGHT,
