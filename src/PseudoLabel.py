@@ -224,8 +224,9 @@ class PseudoLabel:
 
         self.test_generator = ImageDataGenerator().flow_from_directory(
             self.test_data_directory,
+            target_size=(self.image_height, self.image_width),
             color_mode='rgb',
-            batch_size=self.batch_size,
+            batch_size=1,
             shuffle=False,
             class_mode="categorical")
 
