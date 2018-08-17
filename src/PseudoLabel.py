@@ -224,7 +224,12 @@ class PseudoLabel:
             shuffle=True,
             class_mode="categorical")
 
-        test_datagen = ImageDataGenerator()
+        test_datagen = ImageDataGenerator().flow_from_directory(
+            self.test_data_directory,
+            color_mode='rgb',
+            batch_size=self.batch_size,
+            shuffle=False,
+            class_mode="categorical")
 
         self.validation_generator = test_datagen.flow_from_directory(
             self.validation_data_directory,

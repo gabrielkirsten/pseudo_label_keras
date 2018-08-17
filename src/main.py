@@ -168,6 +168,6 @@ def main():
 
     print "Total time to train: %s" % (time.time() - START_TIME)
 
-    make_confusion_matrix(pseudo_label.validation_generator, str(fine_tuning_percent)+'_'+str(no_label_percent), pseudo_label.model)
+    make_confusion_matrix(pseudo_label.test_generator, str(fine_tuning_percent)+'_'+str(no_label_percent), pseudo_label.model)
 if __name__ == '__main__':
     main()
