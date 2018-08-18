@@ -4,7 +4,6 @@ import shutil
 
 # TODO - separate methods
 # TODO - use os.path.join()
-# TODO - remove comments
 
 class ExperimentUtils:
 
@@ -92,12 +91,6 @@ class ExperimentUtils:
                     size_of_train_dataset =      int(((len(filenames)-size_of_no_label_dataset)*percent_of_train_dataset)//100)
                     size_of_test_dataset =       int(((len(filenames)-size_of_no_label_dataset)*percent_of_test_dataset)//100)
                     size_of_validation_dataset = int(((len(filenames)-size_of_no_label_dataset)*percent_of_validation_dataset)//100)
-
-                    # print len(filenames)
-                    # print size_of_no_label_dataset
-                    # print size_of_train_dataset
-                    # print size_of_test_dataset
-                    # print size_of_validation_dataset
 
                     for file_to_create_symbolic_link in filenames[0:size_of_no_label_dataset]:
                         os.symlink(class_path+'/'+file_to_create_symbolic_link, self.experiment_folder+'/no_label/no_label/'+file_to_create_symbolic_link)
