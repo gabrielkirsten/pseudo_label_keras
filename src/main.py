@@ -29,7 +29,7 @@ START_TIME = time.time()
 #
 # =========================================================
 
-IMG_WIDTH, IMG_HEIGHT, IMG_CHANNELS = 128, 128, 3
+IMG_WIDTH, IMG_HEIGHT, IMG_CHANNELS = 256, 256, 3
 TRAIN_DATA_DIR = "../data/train"
 VALIDATION_DATA_DIR = "../data/validation"
 TEST_DATA_DIR = "../data/test"
