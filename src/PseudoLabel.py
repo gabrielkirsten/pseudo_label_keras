@@ -73,6 +73,7 @@ class PseudoLabel:
                                     'fine_tuning': None},
                  optimizer='SGD',
                  metrics_list=['acc'],
+                 h5_filename=None,
                  class_labels=None, 
                  alpha=0.5,
                  print_pseudo_generate=False):
@@ -101,7 +102,7 @@ class PseudoLabel:
         self.model = None
         self.train_generator = None
         self.validation_generator = None
-        self.h5_filename = None
+        self.h5_filename = h5_filename
         self.class_labels = class_labels
         self.alpha = alpha
         self.print_pseudo_generate = print_pseudo_generate
