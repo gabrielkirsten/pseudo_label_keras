@@ -31,11 +31,11 @@ class ExperimentUtils:
             raise ValueError(
                 "The value of percent_of_no_label_dataset, must be between 0.00 and 100.00!")
 
-        self.experiment_folder = experiment_folder = dataset_path+'/'+folder_name_experiment
-        self.train_dataset_folder = train_dataset_folder = self.experiment_folder+'/train'
-        self.test_dataset_folder = test_dataset_folder = self.experiment_folder+'/test'
-        self.validation_dataset_folder = validation_dataset_folder = self.experiment_folder+'/validation'
-        self.no_label_dataset_folder = no_label_dataset_folder = self.experiment_folder+'/no_label'
+        self.experiment_folder = dataset_path+'/'+folder_name_experiment
+        self.train_dataset_folder = self.experiment_folder+'/train'
+        self.test_dataset_folder = self.experiment_folder+'/test'
+        self.validation_dataset_folder = self.experiment_folder+'/validation'
+        self.no_label_dataset_folder = self.experiment_folder+'/no_label'
 
         # Create dataset folder
         if not os.path.exists(self.experiment_folder):
