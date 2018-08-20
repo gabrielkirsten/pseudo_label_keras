@@ -19,7 +19,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import confusion_matrix
 from PseudoLabel import PseudoLabel
-from ExperimentUtils import ExperimentUtils
+from utils.DatasetUtils import DatasetUtils
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress warnings
 START_TIME = time.time()
@@ -140,10 +140,10 @@ def main():
     print "--------------------"
 
     args = get_args()  # read arguments
-    experiment_utils = ExperimentUtils()
+    dataset_utils = DatasetUtils()
     no_label_percent = args['noLabelPercent']
 
-    experiment_utils.create_experiment_dataset(args["datasetPath"], 
+    dataset_utils.create_experiment_dataset(args["datasetPath"], 
                                                percent_of_no_label_dataset = no_label_percent)
 
     fine_tuning_percent = (80 if args["fineTuningRate"] == None else args["fineTuningRate"])
@@ -152,10 +152,10 @@ def main():
                                image_height=IMG_HEIGHT,
                                image_channels=IMG_CHANNELS,
                                class_labels=CLASS_NAMES,
-                               train_data_directory=experiment_utils.train_dataset_folder,
-                               validation_data_directory=experiment_utils.validation_dataset_folder,
-                               test_data_directory=experiment_utils.test_dataset_folder,
-                               no_label_data_directory=experiment_utils.no_label_dataset_folder,
+                               train_data_directory=dataset_utils.train_dataset_folder,
+                               validation_data_directory=dataset_utils.validation_dataset_folder,
+                               test_data_directory=dataset_utils.test_dataset_folder,
+                               no_label_data_directory=dataset_utils.no_label_dataset_folder,
                                epochs=EPOCHS,
                                batch_size=BATCH_SIZE,
                                pseudo_label_batch_size=PSEUDO_LABEL_BATCH_SIZE,
