@@ -146,8 +146,8 @@ class DatasetUtils:
                                                                                                                                           percent_of_validation_dataset)
 
         self._create_symbolic_links(class_path,
-                                    filenames,
                                     class_name,
+                                    filenames,
                                     size_of_no_label_dataset,
                                     size_of_train_dataset,
                                     size_of_test_dataset,
