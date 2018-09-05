@@ -34,8 +34,8 @@ class DatasetUtils:
     def create_experiment_dataset(self,
                                   dataset_path,
                                   folder_name_experiment='.experiment',
-                                  percent_of_train_dataset=20,
-                                  percent_of_test_dataset=60,
+                                  percent_of_train_dataset=60,
+                                  percent_of_test_dataset=20,
                                   percent_of_validation_dataset=20,
                                   percent_of_no_label_dataset=80.0):
         """
@@ -47,9 +47,9 @@ class DatasetUtils:
             folder_name_experiment (str):
                 Name of folder that contains your prepared dataset (default '.experiment').
             percent_of_train_dataset (str): 
-                Percentage of files that will be used to train (default = 20)
+                Percentage of files that will be used to train (default = 60)
             percent_of_test_dataset (str): 
-                Percentage of files that will be used to test (default = 60) 
+                Percentage of files that will be used to test (default = 20) 
             percent_of_validation_dataset (str): 
                 Percentage of files that will be used to validation (default = 20) 
             percent_of_no_label_dataset (str): 
