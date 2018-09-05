@@ -166,22 +166,14 @@ class DatasetUtils:
                                size_of_test_dataset,
                                size_of_validation_dataset):
 
-        for file_to_create_symbolic_link in filenames[0:size_of_no_label_dataset]:
-            os.symlink(os.path.join(class_path, file_to_create_symbolic_link),
-                       os.path.join(self.experiment_folder,
-                                    'no_label',
-                                    'no_label',
-                                    file_to_create_symbolic_link))
-        current_index = size_of_no_label_dataset
-
         # Train
-        for file_to_create_symbolic_link in filenames[current_index:current_index+size_of_train_dataset]:
+        for file_to_create_symbolic_link in filenames[0:size_of_train_dataset]:
             self._create_symbolic_link(
                 class_path,
                 class_name,
                 file_to_create_symbolic_link,
                 self.train_dataset_folder)
-        current_index = size_of_no_label_dataset
+        current_index = size_of_train_dataset
 
         # Test
         for file_to_create_symbolic_link in filenames[current_index:current_index+size_of_test_dataset]:
@@ -192,12 +184,25 @@ class DatasetUtils:
         current_index = current_index+size_of_test_dataset
 
         # Validation
-        for file_to_create_symbolic_link in filenames[current_index:-1]:
+        for file_to_create_symbolic_link in filenames[current_index:current_index+size_of_validation_dataset]:
             self._create_symbolic_link(class_path,
                                        class_name,
                                        file_to_create_symbolic_link,
                                        self.validation_dataset_folder)
-        current_index = size_of_no_label_dataset
+
+
+        print "validation"
+        print len(filenames[current_index:current_index+size_of_validation_dataset])
+        
+        current_index = current_index+size_of_validation_dataset
+
+        for file_to_create_symbolic_link in filenames[current_index:]:
+            os.symlink(os.path.join(class_path, 
+                                    file_to_create_symbolic_link),
+                       os.path.join(self.experiment_folder,
+                                    'no_label',
+                                    'no_label',
+                                    file_to_create_symbolic_link))
 
     def _create_symbolic_link(self, class_path, class_name, file_to_create_symbolic_link, dataset_folder):
         os.symlink(os.path.join(class_path,
