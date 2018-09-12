@@ -1,8 +1,9 @@
 # Pseudo-label with Keras
 This is an implementation of the semi-supervised aproach called pseudo-label using Keras.  This algorithm is based on article *"Pseudo-Label : The Simple and Efficient Semi-Supervised Learning Method for Deep Neural Networks"* by Dong-Hyun Lee.
 
+**warning: This project is under development! To report a problem, create an Issue**
+
 **author:** Gabriel Kirsten Menenezes (https://github.com/gabrielkirsten/)
-**version:** 0.1.0
 
 ## Pseudo-label algorithm
 
@@ -34,12 +35,5 @@ __You must Install:__
 
 
 ### How to use:
-run main.py
+run main.py -d 'your_dataset_path'
 
-### TODO:
-- [x] ~~Commit README [v0.0.1]~~ 
-- [x] Commit innital code 
-- [x] Implement supervised training
-- [x] Implement SDG with mini-batch on training
-- [x] Implement semi-supervised training
-- [ ] Implement validation
