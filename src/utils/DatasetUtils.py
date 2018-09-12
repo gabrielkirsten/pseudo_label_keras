@@ -189,10 +189,6 @@ class DatasetUtils:
                                        class_name,
                                        file_to_create_symbolic_link,
                                        self.validation_dataset_folder)
-
-
-        print "validation"
-        print len(filenames[current_index:current_index+size_of_validation_dataset])
         
         current_index = current_index+size_of_validation_dataset
 
