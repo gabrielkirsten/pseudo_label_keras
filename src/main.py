@@ -77,62 +77,6 @@ def get_args():
     return vars(arg_parse.parse_args())
 
 
-def plot_confusion_matrix(confusion_matrix_to_print, classes,
-                          title='Confusion matrix',
-                          cmap=plt.cm.Blues):
-    """
-        This function prints applicationsand plots the confusion matrix.
-        Normalization can be applied by setting `normalize=True`.
-    """
-
-    plt.imshow(confusion_matrix_to_print,
-               interpolation='nearest', cmap=cmap)
-    plt.title(title)
-    plt.colorbar()
-    tick_marks = np.arange(len(classes))
-    plt.xticks(tick_marks, classes, rotation=45)
-    plt.yticks(tick_marks, classes)
-
-    thresh = confusion_matrix_to_print.max() / 2.
-    for i, j in itertools.product(range(confusion_matrix_to_print.shape[0]),
-                                  range(confusion_matrix_to_print.shape[1])):
-        plt.text(j, i, format(confusion_matrix_to_print[i, j], 'd'),
-                 horizontalalignment="center",
-                 color="white" if confusion_matrix_to_print[i, j] > thresh else "black")
-
-    plt.ylabel('True label')
-    plt.xlabel('Predicted label')
-    plt.tight_layout()
-
-def make_confusion_matrix(validation_generator, file_name, model_final):
-    """print confusion matrix"""
-
-    validation_features = model_final.predict_generator(validation_generator,
-                                                        validation_generator.samples,
-                                                        verbose=0)
-
-    print confusion_matrix(np.argmax(validation_features, axis=1), validation_generator.classes)
-
-def make_confusion_matrix_and_plot(validation_generator, file_name, model_final):
-    """Predict and plot confusion matrix"""
-
-    validation_features = model_final.predict_generator(validation_generator,
-                                                        validation_generator.samples,
-                                                        verbose=0)
-
-    plt.figure()
-
-    plot_confusion_matrix(confusion_matrix(np.argmax(validation_features, axis=1),
-                                           validation_generator.classes),
-                          classes=CLASS_NAMES,
-                          title='Confusion matrix - ' + file_name)
-
-    plt.savefig('../output_images/' + file_name + '_doenca.png')
-
-    print("Total time after generate confusion matrix: %s" %
-          (time.time() - START_TIME))
-
-
 def main():
     print "--------------------"
     print "Experiment begin at:"
