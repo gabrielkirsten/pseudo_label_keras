@@ -10,15 +10,14 @@
 
 """
 
-import time
+import argparse
 import datetime
 import os
-import argparse
-import itertools
-import matplotlib.pyplot as plt
-import numpy as np
-from sklearn.metrics import confusion_matrix
-from PseudoLabel import PseudoLabel
+import time
+
+from classification.PseudoLabel import PseudoLabel
+from metrics.ConfusionMatrix import ConfusionMatrix
+from metrics.LearningCurve import LearningCurve
 from utils.DatasetUtils import DatasetUtils
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress warnings
@@ -87,10 +86,11 @@ def main():
     dataset_utils = DatasetUtils()
     no_label_percent = args['noLabelPercent']
 
-    dataset_utils.create_experiment_dataset(args["datasetPath"], 
-                                               percent_of_no_label_dataset = no_label_percent)
+    dataset_utils.create_experiment_dataset(args["datasetPath"],
+                                            percent_of_no_label_dataset=no_label_percent)
 
-    fine_tuning_percent = (80 if args["fineTuningRate"] == None else args["fineTuningRate"])
+    fine_tuning_percent = (
+        80 if args["fineTuningRate"] == None else args["fineTuningRate"])
 
     pseudo_label = PseudoLabel(image_width=IMG_WIDTH,
                                image_height=IMG_HEIGHT,
@@ -116,11 +116,25 @@ def main():
 
     print "Total time to train: %s" % (time.time() - START_TIME)
 
-    make_confusion_matrix(pseudo_label.test_generator, str(fine_tuning_percent)+'_'+str(no_label_percent), pseudo_label.model)
+    output_predict = pseudo_label.model.predict_generator(pseudo_label.test_generator,
+                                                          pseudo_label.test_generator.samples,
+                                                          verbose=0)
+
+    output_real = pseudo_label.model.predict_generator.classes
+
+    ConfusionMatrix.obtain(output_predict,
+                           output_real,
+                           str(fine_tuning_percent)+'_'+str(no_label_percent),
+                           pseudo_label.model,
+                           CLASS_NAMES)
+
+    LearningCurve.obtain(output_predict, output_real)
 
     print "--------------------"
     print "Experiment end at:"
     print datetime.datetime.now()
     print "--------------------"
+
+
 if __name__ == '__main__':
     main()
