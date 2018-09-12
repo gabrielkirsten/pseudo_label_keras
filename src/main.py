@@ -68,9 +68,9 @@ def get_args():
                            type=str)
 
     arg_parse.add_argument("-n", "--noLabelPercent",
-                           required=True,
+                           required=False,
                            help="Percent of no label dataset",
-                           default=None,
+                           default=80,
                            type=int)
 
     return vars(arg_parse.parse_args())
