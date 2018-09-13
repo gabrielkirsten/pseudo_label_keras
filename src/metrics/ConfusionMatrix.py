@@ -46,7 +46,6 @@ class ConfusionMatrix(Metric):
     def obtain(output_predict,
                classes,
                file_name,
-               model_final,
                class_names,
                generate_graphic_matrix=False):
         """print confusion matrix"""
@@ -54,13 +53,12 @@ class ConfusionMatrix(Metric):
         if generate_graphic_matrix:
             plt.figure()
 
-            ConfusionMatrix.plot_confusion_matrix(confusion_matrix(np.argmax(output_predict, axis=1),
-                                                                   classes),
+            ConfusionMatrix.plot_confusion_matrix(confusion_matrix(output_predict,classes),
                                                   classes=class_names,
                                                   title='Confusion matrix - ' + file_name)
 
             plt.savefig('../output_images/' + file_name + '.png')
         else:
             print confusion_matrix(
-                np.argmax(output_predict, axis=1),
+                output_predict,
                 classes)
