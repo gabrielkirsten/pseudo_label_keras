@@ -432,17 +432,19 @@ class PseudoLabel:
                         verbose = 1
                     else:
                         verbose = 0
-                    no_label_output = self.model.predict_generator(
-                        self.no_label_generator, 
-                        self.no_label_generator.samples, 
-                        verbose=verbose)
+                        
+                    if self.no_label_generator.samples > 0: 
+                        no_label_output = self.model.predict_generator(
+                            self.no_label_generator, 
+                            self.no_label_generator.samples, 
+                            verbose=verbose)
 
-                    # One-hot encoded
-                    self.no_label_generator.classes = np.argmax(no_label_output, axis=1)
+                        # One-hot encoded
+                        self.no_label_generator.classes = np.argmax(no_label_output, axis=1)
 
-                    # Concat Pseudo labels with true labels 
-                    x_pseudo, y_pseudo = next(self.no_label_generator)
-                    x, y = np.concatenate((x, x_pseudo), axis=0), np.concatenate((y, y_pseudo), axis=0)                    
+                        # Concat Pseudo labels with true labels 
+                        x_pseudo, y_pseudo = next(self.no_label_generator)
+                        x, y = np.concatenate((x, x_pseudo), axis=0), np.concatenate((y, y_pseudo), axis=0)                    
 
 
                     # build batch logs
