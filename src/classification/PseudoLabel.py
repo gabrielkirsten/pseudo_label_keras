@@ -3,20 +3,18 @@
 import warnings
 
 import numpy as np
-
 from keras import applications
-from keras import callbacks as cbks
 from keras import backend as K
-from keras.applications import Xception, VGG16, VGG19, ResNet50, InceptionV3, MobileNet
-from keras.layers import Dropout, Flatten, Dense
-from keras.optimizers import SGD, RMSprop, Adagrad, Adadelta, Adam, Adamax, Nadam, TFOptimizer
-from keras.models import Model
+from keras import callbacks as cbks
+from keras.applications import (VGG16, VGG19, InceptionV3, MobileNet, ResNet50,
+                                Xception)
 from keras.callbacks import ModelCheckpoint
+from keras.layers import Dense, Dropout, Flatten
+from keras.models import Model
+from keras.optimizers import (SGD, Adadelta, Adagrad, Adam, Adamax, Nadam,
+                              RMSprop, TFOptimizer)
 from keras.preprocessing.image import ImageDataGenerator
-
-from keras.utils import Sequence
-from keras.utils import GeneratorEnqueuer
-from keras.utils import OrderedEnqueuer
+from keras.utils import GeneratorEnqueuer, OrderedEnqueuer, Sequence
 
 # CONSTANTS
 LIST_OF_ACCEPTABLES_ARCHITECTURES = {
