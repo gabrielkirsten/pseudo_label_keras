@@ -60,7 +60,7 @@ class DatasetUtils:
             raise ValueError(
                 "The sum of train, test and validation dataset must be 100.00!")
 
-        if not (100 > percent_of_no_label_dataset > 0):
+        if not (100 >= percent_of_no_label_dataset >= 0):
             raise ValueError(
                 "The value of percent_of_no_label_dataset, must be between 0.00 and 100.00!")
 
@@ -166,14 +166,15 @@ class DatasetUtils:
                                size_of_test_dataset,
                                size_of_validation_dataset):
 
-        # Train
-        for file_to_create_symbolic_link in filenames[0:size_of_train_dataset]:
-            self._create_symbolic_link(
-                class_path,
-                class_name,
-                file_to_create_symbolic_link,
-                self.train_dataset_folder)
-        current_index = size_of_train_dataset
+        # No label
+        for file_to_create_symbolic_link in filenames[0:size_of_no_label_dataset]:
+            os.symlink(os.path.join(class_path, 
+                                    file_to_create_symbolic_link),
+                       os.path.join(self.experiment_folder,
+                                    'no_label',
+                                    'no_label',
+                                    file_to_create_symbolic_link))
+        current_index = size_of_no_label_dataset
 
         # Test
         for file_to_create_symbolic_link in filenames[current_index:current_index+size_of_test_dataset]:
@@ -192,13 +193,14 @@ class DatasetUtils:
         
         current_index = current_index+size_of_validation_dataset
 
+        # Train
         for file_to_create_symbolic_link in filenames[current_index:]:
-            os.symlink(os.path.join(class_path, 
-                                    file_to_create_symbolic_link),
-                       os.path.join(self.experiment_folder,
-                                    'no_label',
-                                    'no_label',
-                                    file_to_create_symbolic_link))
+            self._create_symbolic_link(
+                class_path,
+                class_name,
+                file_to_create_symbolic_link,
+                self.train_dataset_folder)
+        current_index = size_of_train_dataset
 
     def _create_symbolic_link(self, class_path, class_name, file_to_create_symbolic_link, dataset_folder):
         os.symlink(os.path.join(class_path,
