@@ -87,11 +87,7 @@ def main():
     print "--------------------"
 
     args = get_args()  # read arguments
-    dataset_utils = DatasetUtils()
-    no_label_percent = args['noLabelPercent']
-
-    dataset_utils.create_experiment_dataset(args["datasetPath"],
-                                            percent_of_no_label_dataset=no_label_percent)
+    
 
     fine_tuning_percent = (
         80 if args["fineTuningRate"] == None else args["fineTuningRate"])
