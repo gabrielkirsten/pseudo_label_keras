@@ -15,6 +15,8 @@ import datetime
 import os
 import time
 
+import numpy as np
+
 from classification.PseudoLabel import PseudoLabel
 from metrics.ConfusionMatrix import ConfusionMatrix
 from metrics.LearningCurve import LearningCurve
@@ -50,9 +52,10 @@ def get_args():
 
     arg_parse.add_argument("-a", "--architecture",
                            required=False,
+                           nargs='+',
                            help="Select architecture(Xception, VGG16, VGG19, ResNet50" +
                            ", InceptionV3, MobileNet)",
-                           default="VGG16",
+                           default=["VGG16"],
                            type=str)
 
     arg_parse.add_argument("-f", "--fineTuningRate",
@@ -69,8 +72,9 @@ def get_args():
 
     arg_parse.add_argument("-n", "--noLabelPercent",
                            required=False,
+                           nargs='+',
                            help="Percent of no label dataset",
-                           default=80,
+                           default=[80],
                            type=int)
 
     return vars(arg_parse.parse_args())
@@ -92,43 +96,59 @@ def main():
     fine_tuning_percent = (
         80 if args["fineTuningRate"] == None else args["fineTuningRate"])
 
-    pseudo_label = PseudoLabel(image_width=IMG_WIDTH,
-                               image_height=IMG_HEIGHT,
-                               image_channels=IMG_CHANNELS,
-                               class_labels=CLASS_NAMES,
-                               train_data_directory=dataset_utils.train_dataset_folder,
-                               validation_data_directory=dataset_utils.validation_dataset_folder,
-                               test_data_directory=dataset_utils.test_dataset_folder,
-                               no_label_data_directory=dataset_utils.no_label_dataset_folder,
-                               epochs=EPOCHS,
-                               batch_size=BATCH_SIZE,
-                               pseudo_label_batch_size=PSEUDO_LABEL_BATCH_SIZE,
-                               transfer_learning={
-                                   'use_transfer_learning': True,
-                                   'fine_tuning': fine_tuning_percent
-                               },
-                               architecture=args["architecture"],
-                               h5_filename=str(fine_tuning_percent)+'_'+str(no_label_percent))
 
-    pseudo_label.fit_with_pseudo_label(use_checkpoints=False,
-                                       steps_per_epoch=pseudo_label.train_generator.samples // pseudo_label.batch_size,
-                                       validation_steps=pseudo_label.validation_generator.samples // pseudo_label.batch_size)
+    for architecture in args["architecture"]:
+        
+        data_points_to_learning_curve = []
+        for no_label_percent in args['noLabelPercent']:
 
-    print "Total time to train: %s" % (time.time() - START_TIME)
+            dataset_utils = DatasetUtils()
+            dataset_utils.create_experiment_dataset(args["datasetPath"],
+                                            percent_of_no_label_dataset=no_label_percent)
+                    
+            pseudo_label = PseudoLabel(image_width=IMG_WIDTH,
+                                    image_height=IMG_HEIGHT,
+                                    image_channels=IMG_CHANNELS,
+                                    class_labels=CLASS_NAMES,
+                                    train_data_directory=dataset_utils.train_dataset_folder,
+                                    validation_data_directory=dataset_utils.validation_dataset_folder,
+                                    test_data_directory=dataset_utils.test_dataset_folder,
+                                    no_label_data_directory=dataset_utils.no_label_dataset_folder,
+                                    epochs=EPOCHS,
+                                    batch_size=BATCH_SIZE,
+                                    pseudo_label_batch_size=PSEUDO_LABEL_BATCH_SIZE,
+                                    transfer_learning={
+                                        'use_transfer_learning': True,
+                                        'fine_tuning': fine_tuning_percent
+                                    },
+                                    architecture=architecture,
+                                    h5_filename=str(fine_tuning_percent)+'_'+str(no_label_percent))
 
-    output_predict = pseudo_label.model.predict_generator(pseudo_label.test_generator,
-                                                          pseudo_label.test_generator.samples,
-                                                          verbose=0)
+            pseudo_label.fit_with_pseudo_label(use_checkpoints=False,
+                                            steps_per_epoch=pseudo_label.train_generator.samples // pseudo_label.batch_size,
+                                            validation_steps=pseudo_label.validation_generator.samples // pseudo_label.batch_size)
 
-    output_real = pseudo_label.model.predict_generator.classes
+            print "Total time to train: %s" % (time.time() - START_TIME)
 
-    ConfusionMatrix.obtain(output_predict,
-                           output_real,
-                           str(fine_tuning_percent)+'_'+str(no_label_percent),
-                           pseudo_label.model,
-                           CLASS_NAMES)
+            output_predict = pseudo_label.model.predict_generator(pseudo_label.test_generator,
+                                                                pseudo_label.test_generator.samples,
+                                                                verbose=0)
 
-    LearningCurve.obtain(output_predict, output_real)
+            output_predict = np.argmax(output_predict, axis=1)
+
+            output_real = pseudo_label.test_generator.classes
+
+            ConfusionMatrix.obtain(output_predict,
+                                output_real,
+                                str(fine_tuning_percent)+'_'+str(no_label_percent),
+                                CLASS_NAMES)
+            
+            data_points_to_learning_curve.append({'qtd_examples': pseudo_label.train_generator.samples, 'output_predict': output_predict,'output_real': output_real})
+
+            del pseudo_label
+            del dataset_utils
+
+        LearningCurve.obtain(data_points_to_learning_curve)
 
     print "--------------------"
     print "Experiment end at:"
