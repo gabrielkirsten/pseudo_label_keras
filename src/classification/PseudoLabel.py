@@ -298,7 +298,7 @@ class PseudoLabel:
         # Generate callbacks
         callback_list = []
         if use_checkpoints:
-            callback_list.extend(checkpoint)
+            callback_list.append(checkpoint)
 
         # Init train counters
         epoch = 0
