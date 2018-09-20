@@ -31,19 +31,14 @@ START_TIME = time.time()
 # =========================================================
 
 IMG_WIDTH, IMG_HEIGHT, IMG_CHANNELS = 256, 256, 3
-TRAIN_DATA_DIR = "../data/train"
-VALIDATION_DATA_DIR = "../data/validation"
-TEST_DATA_DIR = "../data/test"
-NO_LABEL_DATA_DIR = "../data/no_label"
 BATCH_SIZE = 32
 PSEUDO_LABEL_BATCH_SIZE = 64
 EPOCHS = 15
-CLASS_NAMES = ['ferrugemAsiatica',
-               'folhaSaudavel',
-               'fundo',
-               'manchaAlvo',
-               'mildio',
-               'oidio']
+CLASS_NAMES = ['AMENDOIM_BRAVO',
+               'CAPIM_AMARGOSO',
+               'MILHO',
+               'SOJA',
+               'SOLO']
 
 
 def get_args():
