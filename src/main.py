@@ -120,7 +120,7 @@ def main():
                                     architecture=architecture,
                                     h5_filename=str(fine_tuning_percent)+'_'+str(no_label_percent))
 
-            pseudo_label.fit_with_pseudo_label(use_checkpoints=False,
+            pseudo_label.fit_with_pseudo_label(use_checkpoints=True,
                                             steps_per_epoch=pseudo_label.train_generator.samples // pseudo_label.batch_size,
                                             validation_steps=pseudo_label.validation_generator.samples // pseudo_label.batch_size)
 
