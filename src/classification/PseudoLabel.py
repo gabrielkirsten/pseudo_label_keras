@@ -113,7 +113,8 @@ class PseudoLabel:
                         optimizer=self.optimizer,
                         metrics_list=self.metrics_list)
 
-        self.generate_h5_filename() if save_heights else None
+        if save_heights:
+            self.generate_h5_filename() 
 
     def make_model(self,
                    architecture=None,
