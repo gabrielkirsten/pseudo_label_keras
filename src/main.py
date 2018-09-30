@@ -112,8 +112,7 @@ def main():
                                         'use_transfer_learning': True,
                                         'fine_tuning': fine_tuning_percent
                                     },
-                                    architecture=architecture,
-                                    h5_filename=str(fine_tuning_percent)+'_'+str(no_label_percent))
+                                    architecture=architecture)
 
             pseudo_label.fit_with_pseudo_label(use_checkpoints=True,
                                             steps_per_epoch=pseudo_label.train_generator.samples // pseudo_label.batch_size,
