@@ -121,6 +121,9 @@ def main():
 
             print "Total time to train: %s" % (time.time() - START_TIME)
 
+
+            pseudo_label.model.load_weights(pseudo_label.h5_filename)
+
             output_predict = pseudo_label.model.predict_generator(pseudo_label.test_generator,
                                                                 pseudo_label.test_generator.samples,
                                                                 verbose=0)
