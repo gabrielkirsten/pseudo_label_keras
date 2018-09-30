@@ -21,6 +21,7 @@ from classification.PseudoLabel import PseudoLabel
 from metrics.ConfusionMatrix import ConfusionMatrix
 from metrics.LearningCurve import LearningCurve
 from utils.DatasetUtils import DatasetUtils
+from sklearn.metrics import accuracy_score
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress warnings
 START_TIME = time.time()
@@ -137,6 +138,7 @@ def main():
                                 CLASS_NAMES)
             
             data_points_to_learning_curve.append({'qtd_examples': pseudo_label.train_generator.samples, 'output_predict': output_predict,'output_real': output_real})
+            print("Accuracy: %f" % accuracy_score(output_real, output_predict))
 
             del pseudo_label
             del dataset_utils
