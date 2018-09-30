@@ -56,7 +56,7 @@ def get_args():
     arg_parse.add_argument("-f", "--fineTuningRate",
                            required=False,
                            help="Fine tuning rate",
-                           default=None,
+                           default=50,
                            type=int)
 
     arg_parse.add_argument("-d", "--datasetPath",
