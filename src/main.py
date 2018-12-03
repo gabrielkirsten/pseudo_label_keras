@@ -185,7 +185,7 @@ def main():
             data_points_to_learning_curve.append(
                 {'qtd_examples': pseudo_label.train_generator.samples, 'output_predict': output_predict, 'output_real': output_real})
             print("Accuracy: %f" % accuracy_score(output_real, output_predict))
-            print("F1 Score: %f" % f1_score(output_real, output_predict))
+            print("F1 Score: %f" % f1_score(output_real, output_predict, average='weighted'))
 
             del pseudo_label
             # del dataset_utils
