@@ -103,7 +103,7 @@ def main():
 
             print "--------------------"
             print "Testing architecture: " + architecture
-            print "With no label percent: " + no_label_percent
+            print "With no label percent: " + str(no_label_percent)
             print "--------------------"
             print ""
             print "--------------------"
