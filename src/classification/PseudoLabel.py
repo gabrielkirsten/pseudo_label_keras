@@ -247,13 +247,13 @@ class PseudoLabel:
                 batch_size=self.pseudo_label_batch_size,
                 shuffle=False,
                 class_mode="categorical")
+            try:
+                self.no_label_generator.num_classes = self.validation_generator.num_classes
+            except AttributeError:
+                self.no_label_generator.num_class = self.validation_generator.num_class
         except:
             self.no_label_generator = None
 
-        try:
-            self.no_label_generator.num_classes = self.validation_generator.num_classes
-        except AttributeError:
-            self.no_label_generator.num_class = self.validation_generator.num_class
 
     def generate_h5_filename(self):
         """
