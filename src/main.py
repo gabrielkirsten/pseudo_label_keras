@@ -94,8 +94,6 @@ def main():
     for i in args['noLabelPercent']:
         dataset_utils.normalize(i)
 
-    exit(0)
-
     for architecture in args["architecture"]:
 
         data_points_to_learning_curve = []
@@ -118,7 +116,7 @@ def main():
                                                        train_data_directory=os.path.join(dataset_utils.get_dataset(0),"train"),
                                                        validation_data_directory=os.path.join(dataset_utils.get_dataset(0),"validation"),
                                                        test_data_directory=os.path.join(dataset_utils.get_dataset(0),"test"),
-                                                       no_label_data_directory=os.path.join(dataset_utils.v(0),"no_label"),
+                                                       no_label_data_directory=os.path.join(dataset_utils.get_dataset(0),"no_label"),
                                                        epochs=EPOCHS,
                                                        batch_size=BATCH_SIZE,
                                                        pseudo_label_batch_size=PSEUDO_LABEL_BATCH_SIZE,
