@@ -22,6 +22,7 @@ from metrics.ConfusionMatrix import ConfusionMatrix
 from metrics.LearningCurve import LearningCurve
 from utils.DatasetUtils import DatasetUtils
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import f1_score
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress warnings
 START_TIME = time.time()
@@ -184,6 +185,7 @@ def main():
             data_points_to_learning_curve.append(
                 {'qtd_examples': pseudo_label.train_generator.samples, 'output_predict': output_predict, 'output_real': output_real})
             print("Accuracy: %f" % accuracy_score(output_real, output_predict))
+            print("F1 Score: %f" % f1_score(output_real, output_predict))
 
             del pseudo_label
             # del dataset_utils
