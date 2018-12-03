@@ -119,7 +119,6 @@ class DatasetUtils:
             )
 
         for index, percent in enumerate(percent_of_no_label_dataset):
-            print "===== " + str(percent) + " ====="
             self.create_experiment_dataset(
                 dataset_is_sub_folder=percent != 0,
                 dataset_path=dataset_path if percent == 0 else os.path.join(
