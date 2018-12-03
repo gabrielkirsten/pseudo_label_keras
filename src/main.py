@@ -128,8 +128,8 @@ def main():
                                                        disconsider_no_label=True)
 
             pseudo_label_supervised_test.fit_with_pseudo_label(use_checkpoints=True,
-                                                               steps_per_epoch=pseudo_label_supervised_test.train_generator.samples // pseudo_label.batch_size,
-                                                               validation_steps=pseudo_label_supervised_test.validation_generator.samples // pseudo_label.batch_size)
+                                                               steps_per_epoch=pseudo_label_supervised_test.train_generator.samples // pseudo_label_supervised_test.batch_size,
+                                                               validation_steps=pseudo_label_supervised_test.validation_generator.samples // pseudo_label_supervised_test.batch_size)
             print "--------------------"
             print "SEMI-SUPERVISED"
             print "--------------------"
