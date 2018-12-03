@@ -239,13 +239,17 @@ class PseudoLabel:
             shuffle=True,
             class_mode="categorical")
             
-        self.no_label_generator = ImageDataGenerator().flow_from_directory(
-            self.no_label_data_directory,
-            target_size=(self.image_height, self.image_width),
-            color_mode='rgb',
-            batch_size=self.pseudo_label_batch_size,
-            shuffle=False,
-            class_mode="categorical")
+        try:
+            self.no_label_generator = ImageDataGenerator().flow_from_directory(
+                self.no_label_data_directory,
+                target_size=(self.image_height, self.image_width),
+                color_mode='rgb',
+                batch_size=self.pseudo_label_batch_size,
+                shuffle=False,
+                class_mode="categorical")
+        except:
+            self.no_label_generator = None
+
         try:
             self.no_label_generator.num_classes = self.validation_generator.num_classes
         except AttributeError:
@@ -435,7 +439,7 @@ class PseudoLabel:
                     else:
                         verbose = 0
                         
-                    if self.no_label_generator.samples > 0 and not self.disconsider_no_label: 
+                    if self.no_label_generator != None and self.no_label_generator.samples > 0 and not self.disconsider_no_label: 
                         no_label_output = self.model.predict_generator(
                             self.no_label_generator, 
                             self.no_label_generator.samples, 
