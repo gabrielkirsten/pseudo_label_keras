@@ -74,7 +74,8 @@ class PseudoLabel:
                  h5_filename=None,
                  class_labels=None, 
                  alpha=0.5,
-                 print_pseudo_generate=False):
+                 print_pseudo_generate=False ,
+                 disconsider_no_label=False):
         """
             Pseudo-label class construtor
         """
@@ -104,6 +105,7 @@ class PseudoLabel:
         self.class_labels = class_labels
         self.alpha = alpha
         self.print_pseudo_generate = print_pseudo_generate
+        self.disconsider_no_label = disconsider_no_label
 
         # Make your model and dataset
         self.make_data_generators()
@@ -433,7 +435,7 @@ class PseudoLabel:
                     else:
                         verbose = 0
                         
-                    if self.no_label_generator.samples > 0: 
+                    if self.no_label_generator.samples > 0 and not self.disconsider_no_label: 
                         no_label_output = self.model.predict_generator(
                             self.no_label_generator, 
                             self.no_label_generator.samples, 
