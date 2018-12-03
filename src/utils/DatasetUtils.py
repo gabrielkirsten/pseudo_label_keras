@@ -102,16 +102,17 @@ class DatasetUtils:
     def create_experiment_dataset_list(self,
                                        dataset_path,
                                        percent_of_no_label_dataset,
+                                       use_old_dataset,
                                        folder_name_experiment='.experiment',
                                        percent_of_train_dataset=60,
                                        percent_of_test_dataset=20,
                                        percent_of_validation_dataset=20):
 
-        
-        try:
-            shutil.rmtree(os.path.join(dataset_path, folder_name_experiment))
-        except:
-            pass
+        if not use_old_dataset:
+            try:
+                shutil.rmtree(os.path.join(dataset_path, folder_name_experiment))
+            except:
+                pass
 
         if 0 not in percent_of_no_label_dataset:
             raise ValueError(

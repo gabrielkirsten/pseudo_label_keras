@@ -73,6 +73,12 @@ def get_args():
                            default=[80],
                            type=int)
 
+    arg_parse.add_argument("-od", "--useOldDataset",
+                           required=False,
+                           help="Use old dataset",
+                           default=False,
+                           type=bool)
+
     return vars(arg_parse.parse_args())
 
 
@@ -89,7 +95,8 @@ def main():
 
     dataset_utils = DatasetUtils()
     dataset_utils.create_experiment_dataset_list(args["datasetPath"],
-                                                 percent_of_no_label_dataset=args['noLabelPercent'])
+                                                 percent_of_no_label_dataset=args['noLabelPercent'],
+                                                 use_old_dataset=args["useOldDataset"])
 
     for i in args['noLabelPercent']:
         dataset_utils.normalize(i)
@@ -179,7 +186,7 @@ def main():
             print("Accuracy: %f" % accuracy_score(output_real, output_predict))
 
             del pseudo_label
-            del dataset_utils
+            # del dataset_utils
 
         LearningCurve.obtain(data_points_to_learning_curve)
 
