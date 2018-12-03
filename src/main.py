@@ -154,6 +154,8 @@ def main():
                                    str(fine_tuning_percent) +
                                    '_'+str(no_label_percent),
                                    CLASS_NAMES)
+            print("Accuracy: %f" % accuracy_score(output_real, output_predict))
+            print("F1 Score: %f" % f1_score(output_real, output_predict, average='weighted'))
             
             print "--------------------"
             print "SEMI-SUPERVISED"
