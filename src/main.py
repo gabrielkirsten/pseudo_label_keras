@@ -98,7 +98,6 @@ def main():
     dataset_utils.create_experiment_dataset_list(args["datasetPath"],
                                                  percent_of_no_label_dataset=args['noLabelPercent'],
                                                  use_old_dataset=args["useOldDataset"])
-    exit(0)
     for i in args['noLabelPercent']:
         dataset_utils.normalize(i)
 
