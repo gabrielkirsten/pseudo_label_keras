@@ -201,7 +201,7 @@ class DatasetUtils:
                          dataset_class_name=""):
 
         for class_name in os.listdir(dataset_path):
-            if (class_name != folder_name_experiment) and class_name not in ".experiment" and class_name not in ['train', 'test', 'validation']:
+            if (class_name != folder_name_experiment) and class_name not in ".experiment" and class_name not in ['train', 'test', 'validation', 'no_label']:
                 class_folder = os.path.join(dataset_path, class_name)
 
                 self._create_all_folders_to_class(class_name)

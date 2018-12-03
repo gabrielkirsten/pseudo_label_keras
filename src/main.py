@@ -98,7 +98,7 @@ def main():
     dataset_utils.create_experiment_dataset_list(args["datasetPath"],
                                                  percent_of_no_label_dataset=args['noLabelPercent'],
                                                  use_old_dataset=args["useOldDataset"])
-
+    exit(0)
     for i in args['noLabelPercent']:
         dataset_utils.normalize(i)
 
@@ -138,6 +138,24 @@ def main():
             pseudo_label_supervised_test.fit_with_pseudo_label(use_checkpoints=True,
                                                                steps_per_epoch=pseudo_label_supervised_test.train_generator.samples // pseudo_label_supervised_test.batch_size,
                                                                validation_steps=pseudo_label_supervised_test.validation_generator.samples // pseudo_label_supervised_test.batch_size)
+            
+            pseudo_label_supervised_test.model.load_weights(
+                "../models_checkpoints/" + pseudo_label_supervised_test.h5_filename + ".h5")
+
+            output_predict = pseudo_label_supervised_test.model.predict_generator(pseudo_label_supervised_test.test_generator,
+                                                                  pseudo_label_supervised_test.test_generator.samples,
+                                                                  verbose=0)
+
+            output_predict = np.argmax(output_predict, axis=1)
+
+            output_real = pseudo_label_supervised_test.test_generator.classes
+
+            ConfusionMatrix.obtain(output_predict,
+                                   output_real,
+                                   str(fine_tuning_percent) +
+                                   '_'+str(no_label_percent),
+                                   CLASS_NAMES)
+            
             print "--------------------"
             print "SEMI-SUPERVISED"
             print "--------------------"
