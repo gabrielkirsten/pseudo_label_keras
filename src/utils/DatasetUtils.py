@@ -5,6 +5,7 @@ import os
 import random
 import shutil
 import sys
+import re
 
 """
 Class to generate dataset of files by creating a reference symbolic link
@@ -201,7 +202,9 @@ class DatasetUtils:
                          dataset_class_name=""):
 
         for class_name in os.listdir(dataset_path):
-            if (class_name != folder_name_experiment) and class_name not in ".experiment" and class_name not in ['train', 'test', 'validation', 'no_label']:
+            regex = re.compile(r'.+.png')
+            if (class_name != folder_name_experiment) and class_name not in ".experiment" and class_name not in ['train', 'test', 'validation', 'no_label'] and not regex.search(class_name):
+                print class_name
                 class_folder = os.path.join(dataset_path, class_name)
 
                 self._create_all_folders_to_class(class_name)
