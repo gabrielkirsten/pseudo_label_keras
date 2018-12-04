@@ -151,15 +151,12 @@ class DatasetUtils:
                     if class_name != "no_label":
                         class_folder = os.path.join(self.get_dataset(no_label_percent), class_name)
                         for (class_path, _, filenames) in os.walk(class_folder):
-                            print class_path
                             if len(filenames) > min_examples_in_class:   
                                 self._randomize_files(class_path, filenames)
                                 qtd_files_to_remove = len(filenames) - min_examples_in_class
                                 while qtd_files_to_remove:
                                     qtd_files_to_remove = qtd_files_to_remove -1
                                     os.remove(os.path.join(class_path, filenames[qtd_files_to_remove]))
-                                    print "removed"
-                                    print os.path.join(class_path, filenames[qtd_files_to_remove])
 
 
     def get_dataset(self, no_label_percent):
@@ -204,7 +201,6 @@ class DatasetUtils:
         for class_name in os.listdir(dataset_path):
             regex = re.compile(r'.+.png')
             if (class_name != folder_name_experiment) and class_name not in ".experiment" and class_name not in ['train', 'test', 'validation', 'no_label'] and not regex.search(class_name):
-                print class_name
                 class_folder = os.path.join(dataset_path, class_name)
 
                 self._create_all_folders_to_class(class_name)
