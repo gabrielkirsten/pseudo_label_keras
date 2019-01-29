@@ -160,7 +160,7 @@ class DatasetUtils:
 
 
     def get_dataset(self, no_label_percent):
-        return os.path.join(os.path.abspath(os.path.join(self.experiment_folder, os.pardir)), str(no_label_percent))
+        return os.path.join(os.path.abspath(os.path.join('/home/aluno/gabriel/_dataset/novo3/.experiment', os.pardir)), str(no_label_percent))
 
     def _create_dataset_folders(self):
         # Create dataset folder
