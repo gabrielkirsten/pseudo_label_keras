@@ -67,6 +67,12 @@ def get_args():
                            default=None,
                            type=str)
 
+    arg_parse.add_argument("-c", "--createDataset",
+                           required=False,
+                           help="Create dataset?",
+                           default=True,
+                           type=str)
+
     arg_parse.add_argument("-n", "--noLabelPercent",
                            required=False,
                            nargs='+',
@@ -95,11 +101,12 @@ def main():
         80 if args["fineTuningRate"] == None else args["fineTuningRate"])
 
     dataset_utils = DatasetUtils()
-    dataset_utils.create_experiment_dataset_list(args["datasetPath"],
-                                                 percent_of_no_label_dataset=args['noLabelPercent'],
-                                                 use_old_dataset=args["useOldDataset"])
-    for i in args['noLabelPercent']:
-        dataset_utils.normalize(i)
+    if(args["createDataset"]):    
+        dataset_utils.create_experiment_dataset_list(args["datasetPath"],
+                                                    percent_of_no_label_dataset=args['noLabelPercent'],
+                                                    use_old_dataset=args["useOldDataset"])
+        for i in args['noLabelPercent']:
+            dataset_utils.normalize(i)
 
     for architecture in args["architecture"]:
 
