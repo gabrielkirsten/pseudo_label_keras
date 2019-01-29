@@ -71,7 +71,7 @@ def get_args():
                            required=False,
                            help="Create dataset?",
                            default=True,
-                           type=str)
+                           type=bool)
 
     arg_parse.add_argument("-n", "--noLabelPercent",
                            required=False,
