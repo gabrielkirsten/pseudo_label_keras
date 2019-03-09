@@ -41,6 +41,11 @@ CLASS_NAMES = ['AMENDOIM_BRAVO',
                'SOJA',
                'SOLO']
 
+# =========================================================
+# End of Parameters
+#
+# =========================================================
+
 
 def get_args():
     """Read the arguments of the program."""
