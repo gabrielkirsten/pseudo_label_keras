@@ -173,7 +173,7 @@ class DatasetUtils:
                        os.path.join(self.experiment_folder,
                                     'no_label',
                                     'no_label',
-                                    file_to_create_symbolic_link))
+                                    "%016x" % (random.getrandbits(64)) + file_to_create_symbolic_link))
         current_index = size_of_no_label_dataset
 
         # Test
@@ -207,7 +207,7 @@ class DatasetUtils:
                                 file_to_create_symbolic_link),
                    os.path.join(dataset_folder,
                                 class_name,
-                                file_to_create_symbolic_link))
+                                "%016x" % (random.getrandbits(64)) + file_to_create_symbolic_link))
 
     def _create_all_folders_to_class(self, class_name):
         self._create_train_folder(class_name)
