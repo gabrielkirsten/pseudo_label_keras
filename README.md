@@ -5,20 +5,6 @@ This is an implementation of the semi-supervised aproach called pseudo-label usi
 
 **author:** Gabriel Kirsten Menenezes (https://github.com/gabrielkirsten/)
 
-## Pseudo-label algorithm
-
-```mermaid
-graph LR
-A[Your dataset] --> B(Unlabel dataset)
-B -- predict --> G
-A --> C(Labeled dataset) 
-C --> E{Supervised trainning}
-E --> G[Your trained model]
-G --> F(Pseudo labels)
-F --> D{Semi-supervised trainning}
-C --> D
-D --> H[Your final trained model]
-```
 
 ### Requirements:
 __You must Install:__  
@@ -58,6 +44,27 @@ Some parameters are defined at the ```main.py``` as:
  - Epochs (EPOCHS);
  - Class names (CLASS_NAMES). 
  
-
+#### Dataset Structure
+```
+./dataset-folder
+├── no_label
+|	└── no_label
+|		└──your_unlabeled_images_here
+├── test
+|	├──your_class_1_here
+|	|	└──your_class_1_images_here
+|	└──your_class_n_here
+|		└──your_class_n_images_here
+├── train
+|	├──your_class_1_here
+|	|	└──your_class_1_images_here
+|	└──your_class_n_here
+|		└──your_class_n_images_here
+└── validation
+	├──your_class_1_here
+	|	└──your_class_1_images_here
+	└──your_class_n_here
+		└──your_class_n_images_here
+```
 
 
