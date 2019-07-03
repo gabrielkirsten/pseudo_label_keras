@@ -52,17 +52,17 @@ Some parameters are defined at the ```main.py``` as:
 |		└──your_unlabeled_images_here
 ├── test
 |	├──your_class_1_here
-|	|	└──your_class_1_images_here
+|	:	└──your_class_1_images_here
 |	└──your_class_n_here
 |		└──your_class_n_images_here
 ├── train
 |	├──your_class_1_here
-|	|	└──your_class_1_images_here
+|	:	└──your_class_1_images_here
 |	└──your_class_n_here
 |		└──your_class_n_images_here
 └── validation
 	├──your_class_1_here
-	|	└──your_class_1_images_here
+	:	└──your_class_1_images_here
 	└──your_class_n_here
 		└──your_class_n_images_here
 ```
