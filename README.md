@@ -11,13 +11,10 @@ __You must Install:__
 1. [Python 2.7](https://www.python.org/downloads/);
 2. [Nvidia cuda libraries](https://developer.nvidia.com/cuda-downloads);
 3. [Nvidia cuDCNN libraries](https://developer.nvidia.com/cudnn);
-4. [Tensorflow](https://www.tensorflow.org/install/) or [Theano](http://deeplearning.net/software/theano/install.html)\*;
+4. [Tensorflow](https://www.tensorflow.org/install/);
 5. [Keras](https://keras.io/#installation);
 6. [Sklearn](http://scikit-learn.org/stable/);
 7. [h5py](http://www.h5py.org/).
-
-**note**:  
-\* never tested on Theano.
 
 
 ### How to use:
